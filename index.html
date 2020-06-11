@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Portfolio</title>
+</head>
+
+<link rel="stylesheet" href="styles.css">
+
+<body>
+
+<div class="main" align="center" >
+    <img id="profile"
+         height="150"
+         width="150">
+    <h1 id="Name"></h1>
+    <h3 id="bio"></h3>
+    <p id="followers" ></p>
+    <p>
+        <a id="gitlink"><img src="image/githublogo.png" >
+        </a>
+        </a>
+    </p>
+    <h2 font="bold">GitHub Projects</h2>
+</div>
+<div class="repos"  >
+
+    <table style="width:100%" >
+        <thead>
+        <tr>
+            <th scope="col" >Name</th>
+            <th scope="col" >URL</th>
+            <th scope="col">Language</th>
+        </tr>
+        </thead>
+        <tbody id="tables">
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+<script>
+    fetch("https://api.github.com/users/sandipthapa543")
+        .then(Response=>Response.json())
+        .then(function (data) {
+            let followersCount= data['followers']
+            let followerInfo=`GitHub Followers ${followersCount}`
+            document.getElementById('profile').src=data['avatar_url']
+            document.getElementById('Name').textContent=data['name']
+            document.getElementById('bio').textContent=data['bio']
+            document.getElementById('followers').textContent=followerInfo
+            document.getElementById('gitlink').href=data['html_url']
+
+        }),
+
+        fetch("https://api.github.com/users/sandipthapa543/repos")
+            .then(Response=>Response.json())
+            .then(data=>{
+                let html='';
+                data.forEach(repo=>{
+                    html +='<tr>';
+                    html +='<td>'+ repo.name +'</td>';
+                    html +='<td >' +repo.html_url +'</td>';
+                    html +='<td>'+ repo.language +'</td>';
+                    html +='</tr>';
+
+
+                });
+                document.getElementById('tables').innerHTML=html;
+            })
+
+</script>
